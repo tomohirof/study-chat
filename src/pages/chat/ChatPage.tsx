@@ -96,7 +96,27 @@ export const ChatPage: React.FC = () => {
         }
       )
 
-      const assistantMessage = response.choices[0].message
+      let assistantMessage = response.choices[0].message
+
+      // 数式記法を変換（[ ] を $$ $$ に変換）
+      if (typeof assistantMessage.content === 'string') {
+        assistantMessage = {
+          ...assistantMessage,
+          content: assistantMessage.content
+            // [ formula ] を $$ formula $$ に変換（ブロック数式）
+            .replace(/\[\s*([^\]]+?)\s*\]/g, (match, formula) => {
+              // 数式らしいパターンのみ変換（バックスラッシュや数学記号を含む）
+              if (formula.match(/[\\_^{}=+\-*/()\\]/) && !formula.match(/^\d+$/)) {
+                return `$$${formula}$$`
+              }
+              return match
+            })
+            // \( formula \) を $ formula $ に変換（インライン数式）
+            .replace(/\\\(([^)]+?)\\\)/g, '$$$1$$')
+            // \[ formula \] を $$ formula $$ に変換（ブロック数式）
+            .replace(/\\\[([^\]]+?)\\\]/g, '$$$$1$$'),
+        }
+      }
 
       // アシスタントの返信を追加
       setMessages((prev) => [...prev, assistantMessage])
