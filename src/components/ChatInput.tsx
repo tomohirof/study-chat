@@ -1,6 +1,6 @@
-import React, { useState, FormEvent, useRef } from 'react'
+import React, { useState, FormEvent, useRef, useEffect } from 'react'
 import { Button } from './ui/Button'
-import { Input } from './ui/Input'
+import { Textarea } from './ui/Textarea'
 import { cn } from '@/lib/utils'
 import { fileToBase64, validateImageFile } from '@/lib/imageUtils'
 
@@ -21,6 +21,16 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  // Textareaの自動高さ調整
+  useEffect(() => {
+    const textarea = textareaRef.current
+    if (textarea) {
+      textarea.style.height = 'auto'
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`
+    }
+  }, [input])
 
   const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -63,6 +73,16 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     }
   }
 
+  // Enterキーで送信、Shift+Enterで改行
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      if ((input.trim() || imagePreview) && !disabled) {
+        handleSubmit(e as any)
+      }
+    }
+  }
+
   return (
     <div className={cn('space-y-2', className)}>
       {/* エラー表示 */}
@@ -91,13 +111,16 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       )}
 
       {/* 入力フォーム */}
-      <form onSubmit={handleSubmit} className="flex gap-2">
-        <Input
+      <form onSubmit={handleSubmit} className="flex gap-2 items-end">
+        <Textarea
+          ref={textareaRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
-          className="flex-1"
+          rows={2}
+          className="flex-1 min-h-[60px] max-h-[200px]"
         />
 
         {/* 画像選択ボタン */}
@@ -112,6 +135,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         <Button
           type="button"
           variant="outline"
+          size="sm"
           onClick={() => fileInputRef.current?.click()}
           disabled={disabled}
           title="画像を添付"
@@ -121,6 +145,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
         <Button
           type="submit"
+          size="sm"
           disabled={disabled || (!input.trim() && !imagePreview)}
         >
           送信
