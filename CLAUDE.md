@@ -20,7 +20,7 @@ ChatGPTを利用した学習モード用のProgressive Web App（PWA）です。
 ```bash
 npm run dev
 ```
-http://localhost:3000 で開発サーバーが起動します。
+http://localhost:1031 で開発サーバーが起動します。
 
 ### テスト実行
 ```bash
