@@ -179,7 +179,7 @@ export const ChatPage: React.FC = () => {
               size="sm"
               onClick={handleClearHistory}
               disabled={messages.length === 0}
-              className="text-xs"
+              className="text-xs text-muted-foreground hover:text-muted-foreground/80"
             >
               履歴クリア
             </Button>
