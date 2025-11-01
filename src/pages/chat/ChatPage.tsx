@@ -78,9 +78,18 @@ export const ChatPage: React.FC = () => {
         ? import.meta.env.VITE_OPENAI_VISION_MODEL || 'gpt-4o-mini'
         : import.meta.env.VITE_OPENAI_MODEL || 'gpt-3.5-turbo'
 
+      // システムプロンプトを追加（数式記法の指示）
+      const systemMessage: ChatMessageType = {
+        role: 'system',
+        content: 'マークダウン形式で回答してください。数式を含む場合は、インライン数式は $...$ 、ブロック数式は $$...$$ の形式で記述してください。',
+      }
+
+      // メッセージリストを構築（システムメッセージを最初に追加）
+      const conversationMessages = [systemMessage, ...messages, userMessage]
+
       // APIを呼び出し
       const response = await apiClient.sendMessage(
-        [...messages, userMessage],
+        conversationMessages,
         {
           model,
           max_tokens: imageDataUrl ? 16384 : undefined, // 画像対応モデルの場合はmax_tokensを設定
