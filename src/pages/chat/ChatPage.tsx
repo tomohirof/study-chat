@@ -168,10 +168,11 @@ export const ChatPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="container mx-auto h-screen flex flex-col p-4">
-        <Card className="flex-1 flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>ChatGPT 学習モード</CardTitle>
+      <div className="container mx-auto h-screen flex flex-col">
+        {/* 固定ヘッダー */}
+        <div className="sticky top-0 z-10 bg-white border-b shadow-sm">
+          <div className="flex items-center justify-between px-6 py-4">
+            <h1 className="text-2xl font-bold text-foreground">学習チャット by chatgpt</h1>
             <Button
               variant="outline"
               size="sm"
@@ -180,35 +181,41 @@ export const ChatPage: React.FC = () => {
             >
               履歴クリア
             </Button>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col overflow-hidden">
-            {/* メッセージリスト */}
-            <div className="flex-1 overflow-y-auto mb-4 space-y-2">
-              {messages.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-muted-foreground">
-                  <p>メッセージを入力して会話を始めましょう</p>
-                </div>
-              ) : (
-                <>
-                  {messages.map((message, index) => (
-                    <ChatMessage key={index} message={message} />
-                  ))}
-                  {isLoading && (
-                    <div className="flex justify-start">
-                      <div className="bg-muted text-foreground max-w-[80%] rounded-lg px-4 py-2">
-                        <div className="flex items-center space-x-2">
-                          <div className="animate-pulse">●</div>
-                          <div className="animate-pulse delay-75">●</div>
-                          <div className="animate-pulse delay-150">●</div>
-                        </div>
+          </div>
+        </div>
+
+        {/* メッセージエリア（スクロール可能） */}
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          <div className="max-w-4xl mx-auto space-y-2">
+            {messages.length === 0 ? (
+              <div className="h-full flex items-center justify-center text-muted-foreground">
+                <p>メッセージを入力して会話を始めましょう</p>
+              </div>
+            ) : (
+              <>
+                {messages.map((message, index) => (
+                  <ChatMessage key={index} message={message} />
+                ))}
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div className="bg-muted text-foreground max-w-[80%] rounded-lg px-4 py-2">
+                      <div className="flex items-center space-x-2">
+                        <div className="animate-pulse">●</div>
+                        <div className="animate-pulse delay-75">●</div>
+                        <div className="animate-pulse delay-150">●</div>
                       </div>
                     </div>
-                  )}
-                  <div ref={messagesEndRef} />
-                </>
-              )}
-            </div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
+              </>
+            )}
+          </div>
+        </div>
 
+        {/* 固定フッター（入力エリア） */}
+        <div className="sticky bottom-0 z-10 bg-white border-t shadow-lg">
+          <div className="max-w-4xl mx-auto px-6 py-4">
             {/* エラー表示 */}
             {error && (
               <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md text-destructive text-sm">
@@ -222,8 +229,8 @@ export const ChatPage: React.FC = () => {
               disabled={isLoading}
               placeholder="メッセージを入力..."
             />
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   )
