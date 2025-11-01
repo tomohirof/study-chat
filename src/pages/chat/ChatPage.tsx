@@ -179,9 +179,9 @@ export const ChatPage: React.FC = () => {
               size="sm"
               onClick={handleClearHistory}
               disabled={messages.length === 0}
-              title="履歴クリア"
+              className="text-xs"
             >
-              🗑️
+              履歴クリア
             </Button>
           </div>
         </div>
