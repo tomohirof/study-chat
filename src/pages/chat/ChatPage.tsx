@@ -40,10 +40,29 @@ export const ChatPage: React.FC = () => {
   }, [messages])
 
   // メッセージ送信
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = async (content: string, imageDataUrl?: string) => {
+    // メッセージコンテンツの構築
+    let messageContent: ChatMessageType['content']
+
+    if (imageDataUrl) {
+      // 画像がある場合は配列形式
+      const contentParts = []
+      if (content.trim()) {
+        contentParts.push({ type: 'text' as const, text: content })
+      }
+      contentParts.push({
+        type: 'image_url' as const,
+        image_url: { url: imageDataUrl },
+      })
+      messageContent = contentParts
+    } else {
+      // テキストのみ
+      messageContent = content
+    }
+
     const userMessage: ChatMessageType = {
       role: 'user',
-      content,
+      content: messageContent,
     }
 
     // ユーザーメッセージを追加
@@ -54,11 +73,17 @@ export const ChatPage: React.FC = () => {
     setError(null)
 
     try {
+      // 画像がある場合はGPT-4 Visionモデルを使用
+      const model = imageDataUrl
+        ? 'gpt-4-vision-preview'
+        : import.meta.env.VITE_OPENAI_MODEL || 'gpt-3.5-turbo'
+
       // APIを呼び出し
       const response = await apiClient.sendMessage(
         [...messages, userMessage],
         {
-          model: import.meta.env.VITE_OPENAI_MODEL || 'gpt-3.5-turbo',
+          model,
+          max_tokens: imageDataUrl ? 4096 : undefined, // Vision APIの場合はmax_tokensを設定
         }
       )
 

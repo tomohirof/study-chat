@@ -60,7 +60,8 @@ src/
 │   └── chat/
 │       └── ChatPage.tsx     # メインチャット画面
 ├── lib/
-│   └── utils.ts             # ユーティリティ関数
+│   ├── utils.ts             # ユーティリティ関数
+│   └── imageUtils.ts        # 画像処理ユーティリティ
 └── test/
     └── setup.ts             # テストセットアップ
 
@@ -154,14 +155,20 @@ npm run test:coverage
 
 ### チャット機能
 
-- OpenAI APIとの会話
+- OpenAI APIとの会話（テキスト・画像対応）
+- **画像添付機能**（📎ボタン）
+  - JPEG, PNG, GIF, WebP対応
+  - 最大20MBまで
+  - Base64エンコードで送信
+  - GPT-4 Vision対応（自動モデル切り替え）
 - リアルタイムメッセージ表示
+- 画像プレビュー機能
 - ローディング状態の表示
 - エラーハンドリング
 
 ### 履歴管理
 
-- localStorageに自動保存
+- localStorageに自動保存（画像含む）
 - 履歴の表示
 - 履歴のクリア機能
 

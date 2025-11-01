@@ -1,10 +1,42 @@
 import React from 'react'
 import { cn } from '@/lib/utils'
-import type { ChatMessage as ChatMessageType } from '@/api/types'
+import type { ChatMessage as ChatMessageType, MessageContent } from '@/api/types'
 
 export interface ChatMessageProps {
   message: ChatMessageType
   className?: string
+}
+
+const renderContent = (content: MessageContent) => {
+  if (typeof content === 'string') {
+    return <div className="whitespace-pre-wrap break-words">{content}</div>
+  }
+
+  // 配列の場合（テキストと画像の組み合わせ）
+  return (
+    <div className="space-y-2">
+      {content.map((item, index) => {
+        if (item.type === 'text') {
+          return (
+            <div key={index} className="whitespace-pre-wrap break-words">
+              {item.text}
+            </div>
+          )
+        }
+        if (item.type === 'image_url') {
+          return (
+            <img
+              key={index}
+              src={item.image_url.url}
+              alt="添付画像"
+              className="max-w-full rounded-md border"
+            />
+          )
+        }
+        return null
+      })}
+    </div>
+  )
 }
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({ message, className }) => {
@@ -32,7 +64,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, className }) 
             AI Assistant
           </div>
         )}
-        <div className="whitespace-pre-wrap break-words">{message.content}</div>
+        {renderContent(message.content)}
       </div>
     </div>
   )

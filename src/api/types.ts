@@ -1,8 +1,23 @@
 // OpenAI APIのリクエスト・レスポンス型定義
 
+export interface TextContent {
+  type: 'text'
+  text: string
+}
+
+export interface ImageContent {
+  type: 'image_url'
+  image_url: {
+    url: string
+    detail?: 'auto' | 'low' | 'high'
+  }
+}
+
+export type MessageContent = string | Array<TextContent | ImageContent>
+
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant'
-  content: string
+  content: MessageContent
 }
 
 export interface ChatCompletionRequest {
