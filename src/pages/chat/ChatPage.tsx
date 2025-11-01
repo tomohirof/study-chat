@@ -3,6 +3,7 @@ import { ChatMessage } from '@/components/ChatMessage'
 import { ChatInput } from '@/components/ChatInput'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Logo } from '@/components/Logo'
 import { ChatApiClient } from '@/api/ChatApiClient'
 import { StorageRepository } from '@/storage/StorageRepository'
 import { ChatHistoryService } from '@/services/ChatHistoryService'
@@ -172,7 +173,7 @@ export const ChatPage: React.FC = () => {
         {/* 固定ヘッダー */}
         <div className="sticky top-0 z-10 bg-white border-b shadow-sm">
           <div className="flex items-center justify-between px-6 py-2">
-            <div className="text-3xl">💬</div>
+            <Logo size={32} />
             <Button
               variant="ghost"
               size="sm"
