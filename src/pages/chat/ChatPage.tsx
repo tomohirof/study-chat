@@ -84,8 +84,13 @@ export const ChatPage: React.FC = () => {
         content: 'マークダウン形式で回答してください。数式を含む場合は、インライン数式は $...$ 、ブロック数式は $$...$$ の形式で記述してください。',
       }
 
-      // メッセージリストを構築（システムメッセージを最初に追加）
-      const conversationMessages = [systemMessage, ...messages, userMessage]
+      // 直近の会話のみをAPIに送信（トークン節約）
+      // 最新10件のメッセージのみを使用
+      const CONTEXT_LIMIT = 10
+      const recentMessages = messages.slice(-CONTEXT_LIMIT)
+
+      // メッセージリストを構築（システムメッセージ + 直近の会話 + 新しいメッセージ）
+      const conversationMessages = [systemMessage, ...recentMessages, userMessage]
 
       // APIを呼び出し
       const response = await apiClient.sendMessage(
