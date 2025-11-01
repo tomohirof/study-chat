@@ -171,15 +171,16 @@ export const ChatPage: React.FC = () => {
       <div className="container mx-auto h-screen flex flex-col">
         {/* 固定ヘッダー */}
         <div className="sticky top-0 z-10 bg-white border-b shadow-sm">
-          <div className="flex items-center justify-between px-6 py-4">
-            <h1 className="text-2xl font-bold text-foreground">学習チャット by chatgpt</h1>
+          <div className="flex items-center justify-between px-6 py-2">
+            <div className="text-3xl">💬</div>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={handleClearHistory}
               disabled={messages.length === 0}
+              title="履歴クリア"
             >
-              履歴クリア
+              🗑️
             </Button>
           </div>
         </div>
