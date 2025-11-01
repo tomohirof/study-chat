@@ -1,8 +1,8 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="512" height="512" fill="#3b82f6"/>
+  <!-- Background (black for PWA) -->
+  <rect width="512" height="512" fill="#000000"/>
 
-  <!-- Large C letter -->
+  <!-- Large C letter (white) -->
   <text
     x="256"
     y="380"

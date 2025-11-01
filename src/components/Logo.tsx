@@ -15,13 +15,14 @@ export const Logo: React.FC<LogoProps> = ({ size = 32, className }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#3b82f6',
+        backgroundColor: '#ffffff',
+        border: '2px solid #e5e7eb',
         borderRadius: '6px',
       }}
     >
       <span
         style={{
-          color: '#ffffff',
+          color: '#000000',
           fontSize: size * 0.7,
           fontWeight: 'bold',
           fontFamily: 'Arial, sans-serif',
