@@ -98,24 +98,35 @@ export const ChatPage: React.FC = () => {
 
       let assistantMessage = response.choices[0].message
 
-      // 数式記法を変換（[ ] を $$ $$ に変換）
+      // デバッグ：元の応答を確認
+      console.log('=== AI応答（変換前）===')
+      console.log(assistantMessage.content)
+
+      // 数式記法を変換
       if (typeof assistantMessage.content === 'string') {
+        const originalContent = assistantMessage.content
+        let convertedContent = assistantMessage.content
+
+        // 1. \[ ... \] を $$ ... $$ に変換（ブロック数式）
+        convertedContent = convertedContent.replace(/\\\[([\s\S]*?)\\\]/g, (match, formula) => {
+          console.log('ブロック数式を変換:', match.substring(0, 50) + '...')
+          return `$$${formula}$$`
+        })
+
+        // 2. \( ... \) を $ ... $ に変換（インライン数式）
+        convertedContent = convertedContent.replace(/\\\(([\s\S]*?)\\\)/g, (match, formula) => {
+          console.log('インライン数式を変換:', match.substring(0, 50) + '...')
+          return `$${formula}$`
+        })
+
         assistantMessage = {
           ...assistantMessage,
-          content: assistantMessage.content
-            // [ formula ] を $$ formula $$ に変換（ブロック数式）
-            .replace(/\[\s*([^\]]+?)\s*\]/g, (match, formula) => {
-              // 数式らしいパターンのみ変換（バックスラッシュや数学記号を含む）
-              if (formula.match(/[\\_^{}=+\-*/()\\]/) && !formula.match(/^\d+$/)) {
-                return `$$${formula}$$`
-              }
-              return match
-            })
-            // \( formula \) を $ formula $ に変換（インライン数式）
-            .replace(/\\\(([^)]+?)\\\)/g, '$$$1$$')
-            // \[ formula \] を $$ formula $$ に変換（ブロック数式）
-            .replace(/\\\[([^\]]+?)\\\]/g, '$$$$1$$'),
+          content: convertedContent,
         }
+
+        console.log('=== AI応答（変換後）===')
+        console.log(convertedContent.substring(0, 500) + '...')
+        console.log('変換実施:', originalContent !== convertedContent)
       }
 
       // アシスタントの返信を追加
