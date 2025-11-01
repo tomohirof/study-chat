@@ -73,9 +73,9 @@ export const ChatPage: React.FC = () => {
     setError(null)
 
     try {
-      // 画像がある場合はGPT-4 Visionモデルを使用
+      // 画像がある場合は画像対応モデルを使用（gpt-4o or gpt-4o-mini）
       const model = imageDataUrl
-        ? 'gpt-4-vision-preview'
+        ? import.meta.env.VITE_OPENAI_VISION_MODEL || 'gpt-4o-mini'
         : import.meta.env.VITE_OPENAI_MODEL || 'gpt-3.5-turbo'
 
       // APIを呼び出し
@@ -83,7 +83,7 @@ export const ChatPage: React.FC = () => {
         [...messages, userMessage],
         {
           model,
-          max_tokens: imageDataUrl ? 4096 : undefined, // Vision APIの場合はmax_tokensを設定
+          max_tokens: imageDataUrl ? 16384 : undefined, // 画像対応モデルの場合はmax_tokensを設定
         }
       )
 

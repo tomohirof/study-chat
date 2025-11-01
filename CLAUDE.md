@@ -105,6 +105,7 @@ VITE_OPENAI_API_KEY=your_openai_api_key_here
 # オプション
 VITE_OPENAI_API_BASE_URL=https://api.openai.com/v1
 VITE_OPENAI_MODEL=gpt-3.5-turbo
+VITE_OPENAI_VISION_MODEL=gpt-4o-mini  # 画像対応モデル（gpt-4oも利用可能）
 ```
 
 `.env.example`を参考にしてください。
@@ -160,7 +161,7 @@ npm run test:coverage
   - JPEG, PNG, GIF, WebP対応
   - 最大20MBまで
   - Base64エンコードで送信
-  - GPT-4 Vision対応（自動モデル切り替え）
+  - GPT-4o/GPT-4o-mini対応（自動モデル切り替え）
 - リアルタイムメッセージ表示
 - 画像プレビュー機能
 - ローディング状態の表示
