@@ -74,10 +74,8 @@ export const ChatPage: React.FC = () => {
     setError(null)
 
     try {
-      // 画像がある場合は画像対応モデルを使用（gpt-4o or gpt-4o-mini）
-      const model = imageDataUrl
-        ? import.meta.env.VITE_OPENAI_VISION_MODEL || 'gpt-4o-mini'
-        : import.meta.env.VITE_OPENAI_MODEL || 'gpt-3.5-turbo'
+      // gpt-4o-miniに統一（テキスト・画像両対応、コスト効率が良い）
+      const model = import.meta.env.VITE_OPENAI_MODEL || 'gpt-4o-mini'
 
       // システムプロンプトを追加（数式記法の指示）
       const systemMessage: ChatMessageType = {
@@ -98,7 +96,7 @@ export const ChatPage: React.FC = () => {
         conversationMessages,
         {
           model,
-          max_tokens: imageDataUrl ? 16384 : undefined, // 画像対応モデルの場合はmax_tokensを設定
+          max_tokens: 16384, // gpt-4o-miniの最大トークン数
         }
       )
 
